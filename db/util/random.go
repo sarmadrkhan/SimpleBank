@@ -2,11 +2,13 @@ package util
 
 import (
 	"math/rand"
+	"strconv"
 	"strings"
 	"time"
 )
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz"
+const numbers = "0123456789"
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
@@ -30,6 +32,19 @@ func RandomString(n int) string {
 	return sb.String()
 }
 
+// RandomNumberSequence generates a random string of  of n digits
+func RandomNumberSequence(n int) string {
+	var sb strings.Builder
+	k := len(numbers)
+
+	for i := 0; i < n; i++ {
+		c := numbers[rand.Intn(k)]
+		sb.WriteByte(c)
+	}
+
+	return sb.String()
+}
+
 // RandomOwner generates a random owner name
 func RandomOwner() string {
 	return RandomString(6)
@@ -45,4 +60,14 @@ func RandomCurrency() string {
 	currencies := []string{"EUR", "USD", "PKR"}
 	n := len(currencies)
 	return currencies[rand.Intn(n)]
+}
+
+// RandomAccountID generates a random accound id
+func RandomAccountID() int64 {
+	numString := RandomNumberSequence(11)
+	num, err := strconv.ParseInt(numString, 10, 64)
+	if err != nil {
+		panic(err)
+	}
+	return num
 }
